@@ -145,13 +145,18 @@
             }
         });
 
-        function processCommand(cmd) {
-            if (!cmd) return;
+        function processCommand(input) {
+            if (!input) return;
+            
+            const args = input.split(" ");
+            const cmd = args[0].toLowerCase();
+            const arg = args[1] ? args[1].toLowerCase() : "";
             
             let response = "";
+            
             switch(cmd) {
                 case "help":
-                    response = "Available commands: help, whoami, date, clear, quote, shark";
+                    response = "Available commands: help, whoami, date, clear, quote, shark, ls, cat";
                     break;
                 case "whoami":
                     response = "mira";
@@ -173,11 +178,25 @@
                 case "shark":
                     response = "🦈 (ASCII shark removed due to bad drawing skills)";
                     break;
+                case "ls":
+                    response = "about.txt  project.txt  contact.txt";
+                    break;
+                case "cat":
+                    if (arg === "about.txt" || arg === "about") {
+                        response = "Hey, I'm Mira. I write Python scripts to automate boring tasks, build local TTS pipelines, and experiment with AI models running directly on the machine. Keeping it simple.";
+                    } else if (arg === "project.txt" || arg === "project") {
+                        response = "Currently working on local AI tools and automation scripts. Public repositories coming soon.";
+                    } else if (arg === "contact.txt" || arg === "contact") {
+                        response = "Email: notuserchan.mira@gmail.com<br>GitHub: github.com/mira-sharkbyte";
+                    } else {
+                        response = `cat: ${arg}: No such file or directory`;
+                    }
+                    break;
                 default:
-                    response = `Command not found: ${cmd}`;
+                    response = `Command not found: ${cmd}. Type 'help' for a list of commands.`;
             }
             
-            termOutput.innerHTML += `<br><span style="color:#4af626">$ ${cmd}</span><br>${response}`;
+            termOutput.innerHTML += `<br><span style="color:#4af626">$ ${input}</span><br>${response}`;
         }
 
         // Catch the Bug Game
